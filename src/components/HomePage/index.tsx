@@ -27,16 +27,16 @@ const HomePage = () => {
     return <Loader />;
   }
 
-  if (!posts.length) {
-    return (
-      <main>
-        <section>
-          <p className='text-center my-4'>You reached the Dead End 💀</p>
-          <Button onClick={goToPreviousPage}>Go back</Button>;
-        </section>
-      </main>
-    );
-  }
+  // if (!posts.length) {
+  //   return (
+  //     <main>
+  //       <section>
+  //         <p className='text-center my-4'>You reached the Dead End 💀</p>
+  //         <Button onClick={goToPreviousPage}>Go back</Button>;
+  //       </section>
+  //     </main>
+  //   );
+  // }
 
   return (
     <main>

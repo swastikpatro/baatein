@@ -48,43 +48,6 @@
   ],
   "posts": [
     {
-      "id": 1,
-      "userId": 1,
-      "content": "This is first post by Swastik Patro.",
-      "likes": {
-        "likeCount": 2,
-        "likedBy": [
-          3,
-          1
-        ]
-      }
-    },
-    {
-      "id": 2,
-      "userId": 1,
-      "content": "This is second post by Swastik.",
-      "likes": {
-        "likeCount": 2,
-        "likedBy": [
-          3,
-          1
-        ]
-      }
-    },
-    {
-      "id": 3,
-      "userId": 1,
-      "content": "This is third post by Swastik.",
-      "likes": {
-        "likeCount": 3,
-        "likedBy": [
-          3,
-          4,
-          1
-        ]
-      }
-    },
-    {
       "id": 14,
       "userId": 3,
       "content": "This is first post by Jacob.",
@@ -341,6 +304,51 @@
       "id": 23,
       "userId": 4,
       "content": "This is third post by Ashish.",
+      "likes": {
+        "likeCount": 0,
+        "likedBy": []
+      }
+    },
+    {
+      "id": "f95fe3a6-4d63-4600-9704-1c3582a22e6b",
+      "userId": 1,
+      "content": "Hii",
+      "likes": {
+        "likeCount": 0,
+        "likedBy": []
+      }
+    },
+    {
+      "id": "54d95b21-b6e4-4b65-8ff6-f11a96886da4",
+      "userId": 1,
+      "content": "Byyee",
+      "likes": {
+        "likeCount": 0,
+        "likedBy": []
+      }
+    },
+    {
+      "id": "d37ccf9d-2151-4b54-9669-fbb0d8145ff8",
+      "userId": 1,
+      "content": "Yes",
+      "likes": {
+        "likeCount": 0,
+        "likedBy": []
+      }
+    },
+    {
+      "id": "c6d5973a-8375-4e62-9503-775d1a8cba26",
+      "userId": 1,
+      "content": "No",
+      "likes": {
+        "likeCount": 0,
+        "likedBy": []
+      }
+    },
+    {
+      "id": "345b0e5d-7e9b-4646-bb22-a0d59a264f02",
+      "userId": 1,
+      "content": "Illey",
       "likes": {
         "likeCount": 0,
         "likedBy": []
