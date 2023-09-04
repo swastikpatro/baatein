@@ -1,56 +1,67 @@
 import axios, { AxiosError } from 'axios';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { jsonServer, paginateLimit } from '../../contants';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { hardCodedTotalPages, jsonServer, paginateLimit } from '../../contants';
 
-export const useGetAllPostsQuery = (page: number) =>
-  useQuery({
-    queryKey: ['all-posts', page],
-    queryFn: async () => {
+export const useGetAllPostsQuery = () =>
+  useInfiniteQuery({
+    queryKey: ['all-posts'],
+    queryFn: async ({ pageParam = 1 }) => {
       const response = await axios.get(
-        `${jsonServer}posts?_expand=user&_page=${page}&_limit=${paginateLimit}`
+        `${jsonServer}posts?_expand=user&_page=${pageParam}&_limit=${paginateLimit}`
       );
 
       if (response.status === 200) {
         return response.data;
       }
     },
-    keepPreviousData: true,
+    getNextPageParam: (_, pages) =>
+      pages.length < hardCodedTotalPages ? pages.length + 1 : undefined,
+
     onError: (error: AxiosError<{ message: string }>) => {
       console.error(error.response?.data.message);
     },
   });
 
-export const useGetUsersPostsQuery = (page: number, userId: number) =>
-  useQuery({
-    queryKey: ['user-posts', page],
-    queryFn: async () => {
+export const useGetUsersPostsQuery = (userId: number) =>
+  useInfiniteQuery({
+    queryKey: ['user-posts'],
+    queryFn: async ({ pageParam = 1 }) => {
       const response = await axios.get(
-        `${jsonServer}posts?userId=${userId}&_expand=user&_page=${page}&_limit=${paginateLimit}`
+        `${jsonServer}posts?userId=${userId}&_expand=user&_page=${pageParam}&_limit=${paginateLimit}`
       );
 
       if (response.status === 200) {
         return response.data;
       }
     },
-    keepPreviousData: true,
+    getNextPageParam: (_, pages) =>
+      pages.length < hardCodedTotalPages ? pages.length + 1 : undefined,
+
     onError: (error: AxiosError<{ message: string }>) => {
       console.error(error.response?.data.message);
     },
   });
 
-export const useGetPostsSearchQuery = (queryText: string, page: number) =>
-  useQuery({
-    queryKey: ['full-search', queryText, page],
-    queryFn: async () => {
+export const useGetPostsSearchQuery = (queryText: string) =>
+  useInfiniteQuery({
+    queryKey: ['full-search', queryText],
+    queryFn: async ({ pageParam = 1 }) => {
       const response = await axios.get(
-        `${jsonServer}posts?q=${queryText}&_expand=user&_page=${page}&_limit=${paginateLimit}`
+        `${jsonServer}posts?q=${queryText}&_expand=user&_page=${pageParam}&_limit=${paginateLimit}`
       );
 
       if (response.status === 200) {
         return response.data;
       }
     },
-    keepPreviousData: true,
+
+    getNextPageParam: (_, pages) =>
+      pages.length < hardCodedTotalPages ? pages.length + 1 : undefined,
+
     onError: (error: AxiosError<{ message: string }>) => {
       console.error(error.response?.data.message);
     },
