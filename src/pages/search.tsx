@@ -4,24 +4,27 @@ import Loader from '@/components/UI/Loader';
 import usePaginate from '@/components/hooks/usePaginate';
 import { useGetPostsSearchQuery } from '@/queries/postQueries';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { isLengthEqualToLimit } from '@/utils/utils';
+import { Fragment } from 'react';
 import useIsEditingPost from '@/components/hooks/useIsEditingPost';
 import PostForm from '@/components/Post/PostForm';
 import { PostType } from '@/types';
+import useInfiniteScroll from '@/components/hooks/useInfiniteScroll';
 
 const Search = () => {
   const {
     query: { q },
   } = useRouter();
-  const { pageIndex, goToNextPage, goToPreviousPage } = usePaginate();
 
   const {
     data: posts,
     isLoading,
     isError,
-  } = useGetPostsSearchQuery(q, pageIndex);
+    hasNextPage,
+    fetchNextPage,
+  } = useGetPostsSearchQuery(q);
   const { isEdittingId, updateEditingId, clearEditingId } = useIsEditingPost();
+
+  useInfiniteScroll(fetchNextPage);
 
   if (!q) {
     return <p className='mt-2 text-center'>Please Enter some search text</p>;
@@ -35,7 +38,7 @@ const Search = () => {
     return <Loader />;
   }
 
-  if (!posts.length) {
+  if (!posts.pages.flat().length) {
     return (
       <main>
         <section>
@@ -49,29 +52,27 @@ const Search = () => {
     <main>
       <h3 className='text-center my-4'>Search Results for '{q}'</h3>
       <section>
-        {posts.map((single: PostType) =>
-          single.id === isEdittingId ? (
-            <PostForm
-              key={single.id}
-              editingData={{ ...single, clearEditingId }}
-            />
-          ) : (
-            <Post
-              key={single.id}
-              postData={single}
-              updateEditingId={updateEditingId}
-            />
-          )
-        )}
+        {posts.pages.map((singleGroup: PostType[]) => {
+          return singleGroup.map((singlePost: PostType) => (
+            <Fragment key={singlePost.id}>
+              {singlePost.id === isEdittingId ? (
+                <PostForm
+                  key={singlePost.id}
+                  editingData={{ ...singlePost, clearEditingId }}
+                />
+              ) : (
+                <Post
+                  key={singlePost.id}
+                  postData={singlePost}
+                  updateEditingId={updateEditingId}
+                />
+              )}
+            </Fragment>
+          ));
+        })}
       </section>
 
-      <div className='flex mt-2'>
-        {pageIndex > 1 && <Button onClick={goToPreviousPage}>Previous</Button>}
-
-        {isLengthEqualToLimit(posts.length) && (
-          <Button onClick={goToNextPage}>Next</Button>
-        )}
-      </div>
+      {hasNextPage && <Loader />}
     </main>
   );
 };

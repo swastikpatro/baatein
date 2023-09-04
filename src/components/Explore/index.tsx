@@ -7,11 +7,20 @@ import { isLengthEqualToLimit } from '@/utils/utils';
 import useIsEditingPost from '../hooks/useIsEditingPost';
 import PostForm from '../Post/PostForm';
 import { PostType } from '@/types';
+import { Fragment, useEffect } from 'react';
+import useInfiniteScroll from '../hooks/useInfiniteScroll';
 
 const ExplorePosts = () => {
-  const { pageIndex, goToNextPage, goToPreviousPage } = usePaginate();
-  const { data: posts, isLoading, isError } = useGetAllPostsQuery(pageIndex);
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetAllPostsQuery();
   const { isEdittingId, updateEditingId, clearEditingId } = useIsEditingPost();
+
+  useInfiniteScroll(fetchNextPage);
 
   if (isError) {
     return <p>Error</p>;
@@ -21,45 +30,32 @@ const ExplorePosts = () => {
     return <Loader />;
   }
 
-  if (!posts.length) {
-    return (
-      <main>
-        <section>
-          <p className='text-center my-4'>You reached the Dead End 💀</p>
-          <Button onClick={goToPreviousPage}>Go back</Button>;
-        </section>
-      </main>
-    );
-  }
-
   return (
     <main>
       <h2 className='text-2xl text-center font-bold mb-4'>Explore</h2>
 
       <section>
-        {posts.map((single: PostType) =>
-          single.id === isEdittingId ? (
-            <PostForm
-              key={single.id}
-              editingData={{ ...single, clearEditingId }}
-            />
-          ) : (
-            <Post
-              key={single.id}
-              postData={single}
-              updateEditingId={updateEditingId}
-            />
-          )
-        )}
+        {posts.pages.map((singleGroup: PostType[]) => {
+          return singleGroup.map((singlePost: PostType) => (
+            <Fragment key={singlePost.id}>
+              {singlePost.id === isEdittingId ? (
+                <PostForm
+                  key={singlePost.id}
+                  editingData={{ ...singlePost, clearEditingId }}
+                />
+              ) : (
+                <Post
+                  key={singlePost.id}
+                  postData={singlePost}
+                  updateEditingId={updateEditingId}
+                />
+              )}
+            </Fragment>
+          ));
+        })}
       </section>
 
-      <div className='flex mt-2'>
-        {pageIndex > 1 && <Button onClick={goToPreviousPage}>Previous</Button>}
-
-        {isLengthEqualToLimit(posts.length) && (
-          <Button onClick={goToNextPage}>Next</Button>
-        )}
-      </div>
+      {hasNextPage && <Loader />}
     </main>
   );
 };

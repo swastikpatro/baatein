@@ -75,9 +75,8 @@
       "userId": 3,
       "content": "This is fourth post by Jacob.",
       "likes": {
-        "likeCount": 3,
+        "likeCount": 2,
         "likedBy": [
-          1,
           4,
           5
         ]
@@ -321,7 +320,7 @@
     {
       "id": "54d95b21-b6e4-4b65-8ff6-f11a96886da4",
       "userId": 1,
-      "content": "Byyee",
+      "content": "Byyee bro",
       "likes": {
         "likeCount": 0,
         "likedBy": []
@@ -339,7 +338,7 @@
     {
       "id": "c6d5973a-8375-4e62-9503-775d1a8cba26",
       "userId": 1,
-      "content": "No",
+      "content": "No why?",
       "likes": {
         "likeCount": 0,
         "likedBy": []
