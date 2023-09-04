@@ -7,9 +7,8 @@ type loadMorePagesType = () => void;
 const useInfiniteScroll = (loadMorePages: loadMorePagesType) => {
   useEffect(() => {
     const handleScroll = async () => {
-      console.log('called');
       if (
-        Math.floor(window.innerHeight + window.scrollY) >=
+        window.innerHeight + window.scrollY >=
         document.documentElement.offsetHeight - 10
       ) {
         // as the response was fast, added this just to show the spinner
